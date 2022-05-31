@@ -6,6 +6,6 @@ str2 = "is"
 if((number % 10) > 5):
     print(f"{str1} {number} {str2} {number % 10} and is greater than 5")
 elif((number % 10) == 0):
-      print(f"{str1} {number} {str2} {number % 10} and is 0")
-elif ((number % 10) < 6 and (number % 10) != 0):
-       print(f"{str1} {number} {str2} {number % 10} and is less than 6 and not 0")
+    print(f"{str1} {number} {str2} {number % 10} and is 0")
+elif((number % 10) < 6 and (number % 10) != 0):
+    print(f"{str1} {number} {str2} {number % 10} and is less than 6 and not 0")
