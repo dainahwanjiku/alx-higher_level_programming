@@ -1,7 +1,4 @@
 #!/usr/bin/python3
-if __name__ == "__main__":
-    import sys
-    print_arg(sys.argv) 
 
 def print_arg(argv):
     n = len(argv) - 1
@@ -17,3 +14,6 @@ def print_arg(argv):
         while i <= n:
             print("{:d}: {:s}".format(i, argv[i]))
             i += 1
+if __name__ == "__main__":
+    import sys
+    print_arg(sys.argv)
