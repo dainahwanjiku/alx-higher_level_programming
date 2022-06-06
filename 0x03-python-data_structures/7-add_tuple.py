@@ -1,4 +1,5 @@
 def add_tuple(tuple_a=(), tuple_b=()):
-    result = tuple(map(lamba i, j: i + j, tuple_a, tuple_b))
-    print("the tuple after addition is: ")
-    print(result)
+    a, b = len(tuple_a), len(tuple_b)
+    tuple_a += (0, 0)
+    tuple_b += (0, 0)
+    return(tuple_a[0] + tuple_b[0], tuple_a[1] + tuple_b[1])
