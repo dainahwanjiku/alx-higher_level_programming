@@ -1,14 +1,12 @@
 #!/usr/bin/python3
 
-
-
-
 class Node:
     """Represents a node in a singly linked list
     Attributes:
         __data (int): data stored inside the node
         __next_node (Node): next node in the linked list
     """
+
     def __init__(self, data, next_node=None):
         """Initializes the node
         Args:
@@ -20,6 +18,7 @@ class Node:
         self.data = data
         self.next_node = next_node
 
+
     @property
     def data(self):
         """getter of __data
@@ -27,6 +26,7 @@ class Node:
             data stored inside the node
         """
         return self.__data
+
 
     @data.setter
     def data(self, value):
@@ -40,6 +40,7 @@ class Node:
             raise TypeError("data must be an integer")
         self.__data = value
 
+
     @property
     def next_node(self):
         """getter of __next_node
@@ -47,6 +48,7 @@ class Node:
            the next node in the linked list
         """
         return self.__next_node
+
 
     @next_node.setter
     def next_node(self, value):
@@ -60,6 +62,7 @@ class Node:
             raise TypeError("next_node must be a Node object")
         self.__next_node = value
 
+
     def __str__(self):
         """String representation of Node instance
         Returns:
@@ -68,17 +71,22 @@ class Node:
         return str(self.__data)
 
 
+
+
 class SinglyLinkedList:
     """Represents a single linked list
     Attributes:
         __head (Node): head of the linked list
     """
+
+
     def __init__(self):
         """Initializes the linked list
         Returns:
             None
         """
         self.__head = None
+
 
     def sorted_insert(self, value):
         """ inserts a new Node instance into the correct sorted position
@@ -100,6 +108,7 @@ class SinglyLinkedList:
             tmp = tmp.next_node
         new.next_node = tmp.next_node
         tmp.next_node = new
+
 
     def __str__(self):
         """String representation of SinglyLinkedList instance
