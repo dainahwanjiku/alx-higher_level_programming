@@ -1,18 +1,20 @@
 #!/usr/bin/python3
 """
-rectangle
+defined rectangle
 """
 
 
 class Rectangle:
     """
-    implementation of the rectangle shape
+    rectangle object with getter and setter
     """
     def __init__(self, width=0, height=0):
+        self.width = width
+        self.height = height
 
     @property
     def width(self):
-        self.__width = width
+        return self.__width
 
     @property setter
     def width(self, value):
@@ -21,19 +23,18 @@ class Rectangle:
             raise TypeError("width must be an integer")
         elif width < 0:
             raise ValueError("width must be  >= 0")
-        self.__value = value
+        self.__width = value
 
 
     
     @property
     def height(self):
-        self.__height = height
+        return self.__height
 
      @property setter
-    def height(self, value):
-        self.__value = value
-        if height != int:
-            raise TypeError("height must be an integer")
-        elif height < 0:
-            raise ValueError("height must be  >= 0")
-        self.__value = value
+     def height(self, value):
+         if height != int:
+             raise TypeError("height must be an integer")
+         elif height < 0:
+             raise ValueError("height must be  >= 0")
+        self.__height = value
