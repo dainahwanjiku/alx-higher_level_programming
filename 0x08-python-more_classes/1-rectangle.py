@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 """
 defined rectangle
 """
@@ -8,13 +9,16 @@ class Rectangle:
     """
     rectangle object with getter and setter
     """
+
     def __init__(self, width=0, height=0):
-        self.__width = width
-        self.__height = height
+        self.width = width
+        self.height = height
 
     @property
     def width(self):
-        return self.__width
+    return self.__width
+
+    """ the width setter follows"""
 
     @width.setter
     def width(self, value):
@@ -27,7 +31,8 @@ class Rectangle:
     @property
     def height(self):
         return self.__height
-
+    
+    """ the height setter """
     @height.setter
     def height(self, value):
         if type(value) is not int:
