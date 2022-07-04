@@ -1,14 +1,14 @@
 #!/usr/bin/python3
 
-""" sorting the list in ascending order """
-
-class list:
-    def __init__(self):
-        pass
+"""
+sorting the list in ascending order
+"""
 
 
 class MyList(list):
-    def __init__(self, integers):
+    """subclass of the list"""
+    def __init__(self):
+        """initializes the object"""
         super().__init__()
         
     def print_sorted(self):
