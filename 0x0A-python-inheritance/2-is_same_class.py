@@ -6,8 +6,6 @@ of the specified class, False if otherwise
 """
 
 
-def __init___()
-
 def is_same_class(obj, a_class):
     """implementation
 
