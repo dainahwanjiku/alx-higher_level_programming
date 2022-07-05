@@ -17,5 +17,5 @@ if os.path.isfile(filename):
     obj = load_from_json_file(filename)
 else:
     obj = []
-    obj.extend(sys.argv[1:]
-    save_to_json_file(obj, filename)
+obj.extend(sys.argv[1:]
+save_to_json_file(obj, filename)
