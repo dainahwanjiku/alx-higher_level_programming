@@ -1,12 +1,15 @@
 #!/usr/bin/python3
 """
-sorting the list in ascending order
+contains the MyList class
 """
 
 
 class MyList(list):
-    """implements sorted printing for the built-in list class."""
-        
+    """a subclass of list"""
+    def __init__(self):
+        """initializes the object"""
+        super().__init__()
+
     def print_sorted(self):
         """prints the sorted list"""
         print(sorted(self))
