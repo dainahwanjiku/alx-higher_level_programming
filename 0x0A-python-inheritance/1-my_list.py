@@ -1,10 +1,7 @@
 #!/usr/bin/python3
-
 """
 sorting the list in ascending order
 """
-
-
 class MyList(list):
     """subclass of the list"""
     def __init__(self):
