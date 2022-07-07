@@ -2,12 +2,12 @@
 """
 This module implements a Square object
 """
-
-
 Rectangle = __import__('9-rectangle').Rectangle
 
 
 class Square(Rectangle):
+    """represent a square"""
+
     def __init__(self, size):
         """initialization
 
