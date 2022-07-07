@@ -10,6 +10,7 @@ Rectangle = __import__('9-rectangle').Rectangle
 class Square(Rectangle):
     def __init__(self, size):
         """initialization
+
         Args:
             size (int): size
         """
@@ -21,4 +22,4 @@ class Square(Rectangle):
         Returns:
             str: string
         """
-        return "[Square] {:d}/{:d}".format(self.__size, self.__size
+        return "[Square] {:d}/{:d}".format(self.__size, self.__size)
