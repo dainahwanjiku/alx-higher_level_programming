@@ -10,10 +10,7 @@ import io
 import json
 import os
 from contextlib import redirect_stdout
-from models import rectangle
-from models.base import Base
-Rectangle = rectangle.Rectangle
-
+from models.rectangle import Rectangle
 
 class TestRectangleDocs(unittest.TestCase):
     """Tests the Rectangle class' style and documentation"""
