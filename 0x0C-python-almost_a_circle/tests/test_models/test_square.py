@@ -231,6 +231,7 @@ class TestSquare(unittest.TestCase):
         with self.assertRaises(ValueError):
             s.update(1, 1, 1, -1)
 
+            
     def test_update_too_many_args(self):
         """test too many args for update"""
         s = Square(1, 0, 0, 1)
