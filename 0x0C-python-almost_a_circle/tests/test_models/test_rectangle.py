@@ -9,6 +9,8 @@ import inspect
 import io
 import json
 import os
+import sys
+import traceback
 from contextlib import redirect_stdout
 from models import rectangle
 from models.base import Base
