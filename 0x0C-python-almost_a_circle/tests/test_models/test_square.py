@@ -10,10 +10,7 @@ import io
 import json
 import os
 from contextlib import redirect_stdout
-from models import square
-from models.base import Base
-Square = square.Square
-
+from models.square import Square
 
 class TestSquareDocs(unittest.TestCase):
     """Tests the Square class' style and documentation"""
