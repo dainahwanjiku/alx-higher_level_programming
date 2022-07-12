@@ -12,7 +12,7 @@ import os
 import sys
 import traceback
 from contextlib import redirect_stdout
-from models import rectangle
+from models.rectangle import Rectangle
 from models.base import Base
 Rectangle = rectangle.Rectangle
 
