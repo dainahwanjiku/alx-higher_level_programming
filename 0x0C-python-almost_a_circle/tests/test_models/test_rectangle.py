@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 """
-Test for the Rectangle class
+Unittest for the Rectangle class
 """
+
 
 import unittest
 import pep8
@@ -14,11 +15,11 @@ import traceback
 from contextlib import redirect_stdout
 from models.rectangle import Rectangle
 from models.base import Base
-Rectangle = rectangle.Rectangle
 
 
 class TestRectangleDocs(unittest.TestCase):
     """Tests the Rectangle class' style and documentation"""
+    
     @classmethod
     def setUpClass(cls):
         """Set up for the doc tests"""
@@ -54,9 +55,11 @@ class TestRectangleDocs(unittest.TestCase):
 
 class TestRectangle(unittest.TestCase):
     """Test the functionality of the Rectangle class"""
+    
     @classmethod
+
     def setUpClass(cls):
-        """"""
+        """a class is set up"""
         Base._Base__nb_objects = 0
         cls.r1 = Rectangle(10, 10)
         cls.r2 = Rectangle(2, 3, 4)
