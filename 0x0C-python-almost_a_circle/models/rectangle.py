@@ -23,7 +23,7 @@ class Rectangle(Base):
         super().__init__(id)
 
     @property
-    def width(self)->int:
+    def width(self):
         """getter for width"""
         return self.__width
 
@@ -36,9 +36,8 @@ class Rectangle(Base):
             raise ValueError("width must be > 0")
         self.__width = value
 
-
     @property
-    def height(self)->int:
+    def height(self):
         """getter for height"""
         return self.__height
 
@@ -51,9 +50,8 @@ class Rectangle(Base):
             raise ValueError("height must be > 0")
         self.__height = value
 
-
     @property
-    def x(self) ->int:
+    def x(self):
         """getter for x"""
         return self.__x
 
@@ -66,9 +64,8 @@ class Rectangle(Base):
             raise ValueError("x must be >= 0")
         self.__x = value
 
-
     @property
-    def y(self) ->int:
+    def y(self):
         """getter for y"""
         return self.__y
 
@@ -90,6 +87,7 @@ class Rectangle(Base):
         print(("\n" * self.__y) +
               "\n".join(((" " * self.__x) + ("#" * self.__width))
                         for i in range(self.__height)))
+    
     def __str__(self):
         """string representation of the rectangle"""
         return "[Rectangle] ({:d}) {:d}/{:d} - {:d}/{:d}".format(self.id,
@@ -123,7 +121,6 @@ class Rectangle(Base):
                 self.x = kwargs["x"]
             if "y" in kwargs:
                 self.y = kwargs["y"]
-
 
     def to_dictionary(self):
         """dictionary representation of a Rectangle"""
