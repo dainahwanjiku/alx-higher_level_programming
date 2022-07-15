@@ -1,11 +1,22 @@
 #!/usr/bin/python3
 """implementation of a rectangle"""
 
+
 from models.base import Base
 
 
 class Rectangle(Base):
+    """class rectangle has been created
+    
+    Attributes:
+    attr1(id): id of object
+    attr2(width): width of the rectangle
+    attr3(height): height of the rectangle
+    attr4(x): number of spaces before rectangle
+    attr5(y): number of newlines before rectangle
+    """
     def __init__(self, width, height, x=0, y=0, id=None):
+        """initialize instance of rectangle class"""
         self.width = width
         self.height = height
         self.x = x
@@ -76,7 +87,7 @@ class Rectangle(Base):
         return self.__width * self.__height
 
     def display(self):
-        """  """
+        """prints in stdout the instance with the character #"""
         print(("\n" * self.__y) +
               "\n".join(((" " * self.__x) + ("#" * self.__width))
                         for i in range(self.__height)))
