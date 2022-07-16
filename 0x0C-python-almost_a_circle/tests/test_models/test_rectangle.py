@@ -6,13 +6,10 @@ Unittest for the Rectangle class
 
 import unittest
 import pep8
-import inspect
 import io
 import json
 import os
-import sys
-import traceback
-from contextlib import redirect_stdout
+import contextlib
 from models.rectangle import Rectangle
 from models.base import Base
 
@@ -25,19 +22,6 @@ class TestRectangleDocs(unittest.TestCase):
         """Set up for the doc tests"""
         cls.rect_funcs = inspect.getmembers(Rectangle, inspect.isfunction)
 
-    def test_pep8_conformance_rectangle(self):
-        """Test that models/rectangle.py conforms to PEP8."""
-        pep8style = pep8.StyleGuide(quiet=True)
-        result = pep8style.check_files(['models/rectangle.py'])
-        self.assertEqual(result.total_errors, 0,
-                         "Found code style errors (and warnings).")
-
-    def test_pep8_conformance_test_rectangle(self):
-        """Test that tests/test_models/test_rectangle.py conforms to PEP8."""
-        pep8style = pep8.StyleGuide(quiet=True)
-        result = pep8style.check_files(['tests/test_models/test_rectangle.py'])
-        self.assertEqual(result.total_errors, 0,
-                         "Found code style errors (and warnings).")
 
     def test_module_docstring(self):
         """Tests for the presence of a module docstring"""
