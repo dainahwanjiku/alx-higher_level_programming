@@ -3,13 +3,19 @@
 this module implements base class of all other classes in this project.
 """
 
+
 import csv
 import json
 import turtle
 
 
 class Base:
-    """implementation"""
+    """implementation
+    
+    Attributes:
+    attr1(__nb_objects): number of objects
+    attr2(id): object id
+    """
     __nb_objects = 0   #private class attribute
     
     def __init__(self, id=None):
