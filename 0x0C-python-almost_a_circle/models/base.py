@@ -63,16 +63,18 @@ class Base:
 
     @classmethod
     def load_from_file(cls):
-        filename = cls.__name__ + ".json"
-        l = []
-        try:
-            with open(filename, 'r') as f:
-                l = cls.from_json_string(f.read())
-            for i, e in enumerate(l):
-                l[i] = cls.create(**l[i])
-        except:
-            pass
-        return l
+        """loads a list of instances from a json file"""
+        if path.exists(cls.__name__ + ".json") is False:
+            return []
+        with open(cls.__name__ + ".json", "r", encoding='utf-8') as file:
+            listofinstances = []
+            objectlist = cls.from__json_string(file.read())
+            for dict in objectlist:
+                objectdict = {}
+                for key, value in dict.items():
+                    objectdict[key] = value
+                listofinstances.append(cls.create(**objectdict))
+            return listofinstances
 
     @classmethod
     def save_to_file_csv(cls, list_objs):
@@ -90,27 +92,16 @@ class Base:
 
     @classmethod
     def load_from_file_csv(cls):
-        """deserializes a list of Rectangles/Squares in csv"""
-        filename = cls.__name__ + ".csv"
-        l = []
-        try:
-            with open(filename, 'r') as csvfile:
-                csv_reader = csv.reader(csvfile)
-                for args in csv_reader:
-                    if cls.__name__ is "Rectangle":
-                        dictionary = {"id": int(args[0]),
-                                      "width": int(args[1]),
-                                      "height": int(args[2]),
-                                      "x": int(args[3]),
-                                      "y": int(args[4])}
-                    elif cls.__name__ is "Square":
-                        dictionary = {"id": int(args[0]), "size": int(args[1]),
-                                      "x": int(args[2]), "y": int(args[3])}
-                    obj = cls.create(**dictionary)
-                    l.append(obj)
-        except:
-            pass
-        return l
+        if path.exists(cls.__name__ + ".csv") is False:
+            return []
+        with open(cls.__name__ + ".csv", "r", newline='') as f:
+            listofinstances = []
+            reader = csv.DictReader(f)
+            for row in reader:
+                for key, value in row.items():
+                    row[key] = int(value)
+                listofinstances.append(cls.create(**row))
+        return listofinstances
 
     @staticmethod
     def draw(list_rectangles, list_squares):
