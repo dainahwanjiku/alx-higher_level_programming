@@ -7,6 +7,7 @@ this module implements base class of all other classes in this project.
 import csv
 import json
 import turtle
+from os import path
 
 
 class Base:
@@ -43,14 +44,17 @@ class Base:
     @classmethod
     def save_to_file(cls, list_objs):
         """writes the JSON string representation of list_objs to a file"""
-        filename = cls.__name__ + ".json"
-        lo = []
-        if list_objs is not None:
-            for i in list_objs:
-                lo.append(cls.to_dictionary(i))
-        with open(filename, 'w') as f:
-            f.write(cls.to_json_string(lo))
+        list_dictionaries = []
+        if list_objs is None:
+            with open(cls.__name__ + ".json", "w",  encoding='utf-8') as file:
+                file.write(Base.to_json_string(list_dictionaries))
+            return
+        for model in list_objs:
+            list_dictionaries.append(model.to_dictionary())
+        with open(cls.__name__ + ".json", "w",  encoding='utf-8') as file:
+            file.write(Base.to_json_string(list_dictionaries))
 
+    
     @classmethod
     def create(cls, **dictionary):
         """returns an instance with all attributes already set"""
