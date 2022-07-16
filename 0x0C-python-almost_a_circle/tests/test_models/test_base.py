@@ -7,7 +7,11 @@ import unittest
 import inspect
 import pep8
 import json
+import os
+from os import path
 from models.base import Base
+from models.rectangle import Rectangle
+from models.square import Square
 
 
 class TestBaseDocs(unittest.TestCase):
