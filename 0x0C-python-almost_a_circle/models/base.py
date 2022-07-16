@@ -11,21 +11,21 @@ import turtle
 
 class Base:
     """implementation
-    
+
     Attributes:
     attr1(__nb_objects): number of objects
     attr2(id): object id
     """
-    __nb_objects = 0   #private class attribute
-    
+    __nb_objects = 0
+
     def __init__(self, id=None):
         """initialization of the base class"""
-        if id != None:
+        if id is not None:
             self.id = id
         else:
             Base.__nb_objects += 1
             self.id = Base.__nb_objects
-    
+
     @staticmethod
     def to_json_string(list_dictionaries):
         """returns the JSON string representation of a list of dictionaries"""
