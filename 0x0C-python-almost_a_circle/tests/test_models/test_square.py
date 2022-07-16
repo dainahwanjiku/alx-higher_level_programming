@@ -3,6 +3,7 @@
 Test for the Square class
 """
 
+
 import unittest
 import pep8
 import inspect
@@ -11,6 +12,9 @@ import json
 import os
 from contextlib import redirect_stdout
 from models.square import Square
+from models.base import Base
+from models.rectangle import Rectangle
+
 
 class TestSquareDocs(unittest.TestCase):
     """Tests the Square class' style and documentation"""
