@@ -79,16 +79,16 @@ class Base:
     @classmethod
     def save_to_file_csv(cls, list_objs):
         """serializes a list of Rectangles/Squares in csv"""
-        filename = cls.__name__ + ".csv"
-        with open(filename, 'w', newline='') as csvfile:
-            csv_writer = csv.writer(csvfile)
-            if cls.__name__ is "Rectangle":
-                for obj in list_objs:
-                    csv_writer.writerow([obj.id, obj.width, obj.height,
-                                         obj.x, obj.y])
-            elif cls.__name__ is "Square":
-                for obj in list_objs:
-                    csv_writer.writerow([obj.id, obj.size, obj.x, obj.y])
+        with open(cls.__name__ + ".csv", "w", newline='') as f:
+            if cls.__name__ == "Rectangle":
+                fieldnames = ['id', 'width', 'height', 'x', 'y']
+            elif cls.__name__ == "Square":
+                fieldnames = ['id', 'size', 'x', 'y']
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            if list_objs is not None:
+                for model in list_objs:
+                    writer.writerow(model.to_dictionary())
 
     @classmethod
     def load_from_file_csv(cls):
