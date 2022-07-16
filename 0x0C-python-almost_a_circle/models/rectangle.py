@@ -87,7 +87,7 @@ class Rectangle(Base):
         print(("\n" * self.__y) +
               "\n".join(((" " * self.__x) + ("#" * self.__width))
                         for i in range(self.__height)))
-    
+
     def __str__(self):
         """string representation of the rectangle"""
         return "[Rectangle] ({:d}) {:d}/{:d} - {:d}/{:d}".format(self.id,
@@ -131,4 +131,4 @@ class Rectangle(Base):
         d["x"] = self.x
         d["y"] = self.y
         return d
-    #this is my comment
+        """the end of the code"""
