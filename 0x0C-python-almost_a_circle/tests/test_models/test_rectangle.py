@@ -1,399 +1,835 @@
 #!/usr/bin/python3
-"""
-Unittest for the Rectangle class
-"""
+"""Unittest for Rectangle class"""
 
 
 import unittest
-import pep8
-import io
-import json
-import os
-import contextlib
 from models.rectangle import Rectangle
 from models.base import Base
+import io
+import contextlib
 
 
-class TestRectangleDocs(unittest.TestCase):
-    """Tests the Rectangle class' style and documentation"""
-    
-    @classmethod
-    def setUpClass(cls):
-        """Set up for the doc tests"""
-        cls.rect_funcs = inspect.getmembers(Rectangle, inspect.isfunction)
+class TestBaseClass(unittest.TestCase):
+    """This class allows for testing of Base class"""
 
+    def test_Rectangleinheritance(self):
+        """This function tests that rectangle inherits from Base"""
+        Rectangle.reset_objects()
+        self.assertEqual(issubclass(Rectangle, Base), True)
 
-    def test_module_docstring(self):
-        """Tests for the presence of a module docstring"""
-        self.assertTrue(len(rectangle.__doc__) >= 1)
+    def test_objectinheritance(self):
+        """This function tests that rectangle inherits from Base"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(1, 1)
+        self.assertEqual(isinstance(r1, Rectangle), True)
 
-    def test_class_docstring(self):
-        """Tests for the presence of a class docstring"""
-        self.assertTrue(len(Rectangle.__doc__) >= 1)
+    def test_errorfornoarguments(self):
+        """This function tests that Typeerror is thrown when 0 arguments"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle()
+        self.assertEqual(
+            str(e.exception),
+            "__init__() missing 2 required positional arguments: 'width' and" +
+            " 'height'")
 
-    #def test_func_docstrings(self):
-        #"""Tests for the presence of docstrings in all functions"""
-        #for func in self.rect_funcs:
-            #self.assertTrue(len(func[1].__doc__) >= 1)
+    def test_errorfor1argument(self):
+        """This function tests that Typeerror is thrown when 1 argument"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1)
+        self.assertEqual(
+            str(e.exception),
+            "__init__() missing 1 required positional argument: 'height'")
 
+    def test_errorfortoomanyarguments(self):
+        """This function tests that Valueerror is thrown when extra args"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, 2, 3, 4, 5, 7)
+        self.assertEqual(
+            str(e.exception),
+            "'__init__() takes from 3 to 6" +
+            "positional arguments but 7 were given'")
 
-class TestRectangle(unittest.TestCase):
-    """Test the functionality of the Rectangle class"""
-    
-    @classmethod
+    def test_singlerectanglecreation(self):
+        """This function tests for single instance creation"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 2)
+        self.assertEqual(r1.id, 1)
 
-    def setUpClass(cls):
-        """a class is set up"""
-        Base._Base__nb_objects = 0
-        cls.r1 = Rectangle(10, 10)
-        cls.r2 = Rectangle(2, 3, 4)
-        cls.r3 = Rectangle(5, 6, 7, 8, 9)
-        cls.r4 = Rectangle(11, 12, 13, 14)
+    def test_multiplerectanglecreation(self):
+        """This function tests for multiple instance creation"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 2)
+        r2 = Rectangle(2, 10)
+        r3 = Rectangle(10, 2)
+        self.assertEqual(r1.id, 1)
+        self.assertEqual(r2.id, 2)
+        self.assertEqual(r3.id, 3)
 
-    def test_id(self):
-        """Test for functioning ID"""
-        self.assertEqual(self.r1.id, 1)
-        self.assertEqual(self.r2.id, 2)
-        self.assertEqual(self.r3.id, 9)
-        self.assertEqual(self.r4.id, 3)
+    def test_rectanglecreationwith1and2(self):
+        """This function tests for ereationwithtwoattributesset"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(1, 2)
+        self.assertEqual(r1.width, 1)
+        self.assertEqual(r1.height, 2)
 
-    def test_width(self):
-        """Test for functioning width"""
-        self.assertEqual(self.r1.width, 10)
-        self.assertEqual(self.r2.width, 2)
-        self.assertEqual(self.r3.width, 5)
-        self.assertEqual(self.r4.width, 11)
+    def test_rectanglecreationwithheight0(self):
+        """This function tests for height set to 0"""
+        Rectangle.reset_objects()
+        with self.assertRaises(ValueError) as e:
+            r1 = Rectangle(1, 0)
+        self.assertEqual(str(e.exception), 'height must be > 0')
 
-    def test_height(self):
-        """Test for functioning height"""
-        self.assertEqual(self.r1.height, 10)
-        self.assertEqual(self.r2.height, 3)
-        self.assertEqual(self.r3.height, 6)
-        self.assertEqual(self.r4.height, 12)
+    def test_singlerectanglecreationwithallvalues(self):
+        """This function tests for single instance creati\
+on"""
+        Rectangle.reset_objects()
+        s1 = Rectangle(10, 10, 10, 10, 10)
+        self.assertEqual(s1.width, 10)
+        self.assertEqual(s1.height, 10)
+        self.assertEqual(s1.x, 10)
+        self.assertEqual(s1.y, 10)
+        self.assertEqual(s1.id, 10)
 
-    def test_x(self):
-        """Test for functioning x"""
-        self.assertEqual(self.r1.x, 0)
-        self.assertEqual(self.r2.x, 4)
-        self.assertEqual(self.r3.x, 7)
-        self.assertEqual(self.r4.x, 13)
+    def test_duplicateid(self):
+        """This function tests for multiple instance creation"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 5)
+        r2 = Rectangle(10, 10, 10, 10, 5)
+        self.assertEqual(r1.id, 5)
+        self.assertEqual(r2.id, 5)
 
-    def test_y(self):
-        """Test for functioning y"""
-        self.assertEqual(self.r1.y, 0)
-        self.assertEqual(self.r2.y, 0)
-        self.assertEqual(self.r3.y, 8)
-        self.assertEqual(self.r4.y, 14)
+    def test_badwidthvaluewithstring(self):
+        """This function tests for bad size value with string"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle("foo", 1, 2, 3)
+        self.assertEqual(str(e.exception), 'width must be an integer')
 
-    def test_mandatory_width(self):
-        """Test that width is a mandatory arg"""
-        with self.assertRaises(TypeError):
-            r = Rectangle()
+    def test_badheightvaluewithstring(self):
+        """This function tests for bad size value with string"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, "foo", 1, 2, 3)
+        self.assertEqual(str(e.exception), 'height must be an integer')
 
-    def test_mandatory_height(self):
-        """Test that height is a mandatory arg"""
-        with self.assertRaises(TypeError):
-            r = Rectangle(1)
+    def test_badxvaluewithstring(self):
+        """This function tests for bad x value with string"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, 2, "foo", 2, 3)
+        self.assertEqual(str(e.exception), 'x must be an integer')
 
-    def test_width_typeerror(self):
-        """Test non-ints for width"""
-        with self.assertRaisesRegex(TypeError, "width must be an integer"):
-            r = Rectangle("hello", 1)
-        with self.assertRaisesRegex(TypeError, "width must be an integer"):
-            r = Rectangle(True, 1)
+    def test_badyvaluewithstring(self):
+        """This function tests for bad y value with string"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, 2, 3, "foo", 2)
+        self.assertEqual(str(e.exception), 'y must be an integer')
 
-    def test_height_typeerror(self):
-        """Test non-ints for height"""
-        with self.assertRaisesRegex(TypeError, "height must be an integer"):
-            r = Rectangle(1, "hello")
-        with self.assertRaisesRegex(TypeError, "height must be an integer"):
-            r = Rectangle(1, True)
+    def test_badwidthvaluewithtuple(self):
+        """This function tests for bad width value with tuple"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle((1, 2), 1, 2, 3)
+        self.assertEqual(str(e.exception), 'width must be an integer')
 
-    def test_x_typeerror(self):
-        """Test non-ints for x"""
-        with self.assertRaisesRegex(TypeError, "x must be an integer"):
-            r = Rectangle(1, 1, "hello")
-        with self.assertRaisesRegex(TypeError, "x must be an integer"):
-            r = Rectangle(1, 1, True)
+    def test_badheightvaluewithtuple(self):
+        """This function tests for bad width value with tuple"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, (1, 2), 1, 2, 3)
+        self.assertEqual(str(e.exception), 'height must be an integer')
 
-    def test_y_typeerror(self):
-        """Test non-ints for y"""
-        with self.assertRaisesRegex(TypeError, "y must be an integer"):
-            r = Rectangle(1, 1, 1, "hello")
-        with self.assertRaisesRegex(TypeError, "y must be an integer"):
-            r = Rectangle(1, 1, 1, True)
+    def test_badxvaluewithtuple(self):
+        """This function tests for bad x value with tuple"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(5, 1, (1, 2), 2, 3)
+        self.assertEqual(str(e.exception), 'x must be an integer')
 
-    def test_width_valueerror(self):
-        """Test ints <= 0 for width"""
-        with self.assertRaisesRegex(ValueError, "width must be > 0"):
-            r = Rectangle(-1, 1)
-        with self.assertRaisesRegex(ValueError, "width must be > 0"):
-            r = Rectangle(0, 1)
+    def test_badyvaluewithtuple(self):
+        """This function tests for bad y value with tuple"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(5, 1, 2, (1, 2), 3)
+        self.assertEqual(str(e.exception), 'y must be an integer')
 
-    def test_height_valueerror(self):
-        """Test ints <= 0 for height"""
-        with self.assertRaisesRegex(ValueError, "height must be > 0"):
-            r = Rectangle(1, -1)
-        with self.assertRaisesRegex(ValueError, "height must be > 0"):
-            r = Rectangle(1, 0)
+    def test_badwidthvaluelists(self):
+        """This function tests for bad width value with list"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle([1, 2], 1, 2, 3, 5)
+        self.assertEqual(str(e.exception), 'width must be an integer')
 
-    def test_x_valueerror(self):
-        """Test ints < 0 for x"""
-        with self.assertRaisesRegex(ValueError, "x must be >= 0"):
-            r = Rectangle(1, 1, -1)
+    def test_badheightvaluelists(self):
+        """This function tests for bad width value with list"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, [1, 2], 1, 2, 3)
+        self.assertEqual(str(e.exception), 'height must be an integer')
 
-    def test_y_valueerror(self):
-        """Test ints <= 0 for y"""
-        with self.assertRaisesRegex(ValueError, "y must be >= 0"):
-            r = Rectangle(1, 1, 1, -1)
+    def test_badxvaluewithlist(self):
+        """This function tests for bad x value with list"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(2, 1, [1, 2], 2, 3)
+        self.assertEqual(str(e.exception), 'x must be an integer')
 
-    def test_area(self):
-        """test area"""
-        self.assertEqual(self.r1.area(), 100)
-        self.assertEqual(self.r2.area(), 6)
-        self.assertEqual(self.r3.area(), 30)
-        self.assertEqual(self.r4.area(), 132)
+    def test_badyvaluewithlist(self):
+        """This function tests for bad y value with list"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, 2, 3, [1, 2], 3)
+        self.assertEqual(str(e.exception), 'y must be an integer')
 
-    def test_area_args(self):
-        """Test too many args for area()"""
-        with self.assertRaises(TypeError):
-            r = self.r1.area(1)
+    def test_badwidthvaluebool(self):
+        """This function tests for bad width value with bools"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(True, 1, 2, 3, 4)
+        self.assertEqual(str(e.exception), 'width must be an integer')
 
-    def test_basic_display(self):
-        """Test display without x and y"""
-        r = Rectangle(2, 3, 0, 0, 1)
-        with io.StringIO() as buf, redirect_stdout(buf):
-            self.r1.display()
-            output = buf.getvalue()
-            self.assertEqual(output, ("#" * 10 + "\n") * 10)
-        with io.StringIO() as buf, redirect_stdout(buf):
-            r.display()
-            output = buf.getvalue()
-            self.assertEqual(output, ("#" * 2 + "\n") * 3)
+    def test_badheightvaluebool(self):
+        """This function tests for bad width value with bools"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, True, 1, 2, 3)
+        self.assertEqual(str(e.exception), 'height must be an integer')
 
-    def test_display_too_many_args(self):
-        """Test display with too many args"""
-        with self.assertRaises(TypeError):
-            self.r1.display(1)
+    def test_badxvaluewithbools(self):
+        """This function tests for bad x value with bools"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(3, 1, False, 2, 3)
+        self.assertEqual(str(e.exception), 'x must be an integer')
 
-    def test_str(self):
-        """Test the __str__ method"""
-        self.assertEqual(str(self.r1), "[Rectangle] (1) 0/0 - 10/10")
-        self.assertEqual(str(self.r2), "[Rectangle] (2) 4/0 - 2/3")
-        self.assertEqual(str(self.r3), "[Rectangle] (9) 7/8 - 5/6")
-        self.assertEqual(str(self.r4), "[Rectangle] (3) 13/14 - 11/12")
+    def test_badyvaluewithbools(self):
+        """This function tests for bad y value with bools"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(2, 1, 2, True, 3)
+        self.assertEqual(str(e.exception), 'y must be an integer')
 
-    def test_display_xy(self):
-        """Testing the display method with x and y"""
-        with io.StringIO() as buf, redirect_stdout(buf):
-            self.r2.display()
-            output = buf.getvalue()
-            self.assertEqual(output, (" " * 4 + "#" * 2 + "\n") * 3)
+    def test_badwidthvaluefloats(self):
+        """This function tests for bad width value with floats"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(float(1), 1, 2, 3, 5)
+        self.assertEqual(str(e.exception), 'width must be an integer')
 
-        with io.StringIO() as buf, redirect_stdout(buf):
-            self.r3.display()
-            output = buf.getvalue()
-            self.assertEqual(output, "\n" * 8 +
-                             (" " * 7 + "#" * 5 + "\n") * 6)
+    def test_badheightvaluefloats(self):
+        """This function tests for bad width value with floats"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, float(1), 1, 2, 3)
+        self.assertEqual(str(e.exception), 'height must be an integer')
 
-        with io.StringIO() as buf, redirect_stdout(buf):
-            self.r4.display()
-            output = buf.getvalue()
-            self.assertEqual(output, "\n" * 14 +
-                             (" " * 13 + "#" * 11 + "\n") * 12)
+    def test_badxvaluewithfloats(self):
+        """This function tests for bad x value with floats"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, 2, float(1), 2, 3)
+        self.assertEqual(str(e.exception), 'x must be an integer')
 
-    def test_update_args(self):
-        """Testing the udpate method with *args"""
-        r = Rectangle(1, 1, 0, 0, 1)
-        self.assertEqual(str(r), "[Rectangle] (1) 0/0 - 1/1")
-        r.update(89)
-        self.assertEqual(str(r), "[Rectangle] (89) 0/0 - 1/1")
-        r.update(89, 2)
-        self.assertEqual(str(r), "[Rectangle] (89) 0/0 - 2/1")
-        r.update(89, 2, 3)
-        self.assertEqual(str(r), "[Rectangle] (89) 0/0 - 2/3")
-        r.update(89, 2, 3, 4)
-        self.assertEqual(str(r), "[Rectangle] (89) 4/0 - 2/3")
-        r.update(89, 2, 3, 4, 5)
-        self.assertEqual(str(r), "[Rectangle] (89) 4/5 - 2/3")
+    def test_badyvaluewithfloats(self):
+        """This function tests for bad y value with floats"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, 2, 4, float(1), 3)
+        self.assertEqual(str(e.exception), 'y must be an integer')
 
-    def test_update_args_setter(self):
-        """tests that the update method uses setter with *args"""
-        r = Rectangle(1, 1, 0, 0, 1)
-        with self.assertRaisesRegex(TypeError, "width must be an integer"):
-            r.update(1, "hello")
-        with self.assertRaisesRegex(TypeError, "height must be an integer"):
-            r.update(1, 1, "hello")
-        with self.assertRaisesRegex(TypeError, "x must be an integer"):
-            r.update(1, 1, 1, "hello")
-        with self.assertRaisesRegex(TypeError, "y must be an integer"):
-            r.update(1, 1, 1, 1, "hello")
-        with self.assertRaisesRegex(ValueError, "width must be > 0"):
-            r.update(1, 0)
-        with self.assertRaisesRegex(ValueError, "width must be > 0"):
-            r.update(1, -1)
-        with self.assertRaisesRegex(ValueError, "height must be > 0"):
-            r.update(1, 1, 0)
-        with self.assertRaisesRegex(ValueError, "height must be > 0"):
-            r.update(1, 1, -1)
-        with self.assertRaisesRegex(ValueError, "x must be >= 0"):
-            r.update(1, 1, 1, -1)
-        with self.assertRaisesRegex(ValueError, "y must be >= 0"):
-            r.update(1, 1, 1, 1, -1)
+    def test_badwidthvaluesets(self):
+        """This function tests for bad width value with sets"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle({1, 2, 3}, 1, 2, 3, 5)
+        self.assertEqual(str(e.exception), 'width must be an integer')
 
-    def test_update_too_many_args(self):
-        """test too many args for update"""
-        r = Rectangle(1, 1, 0, 0, 1)
-        r.update(1, 1, 1, 1, 1, 2)
-        self.assertEqual(str(r), "[Rectangle] (1) 1/1 - 1/1")
+    def test_badheightvaluesets(self):
+        """This function tests for bad width value with sets"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, {1, 2, 3}, 1, 2, 5)
+        self.assertEqual(str(e.exception), 'height must be an integer')
 
-    def test_update_no_args(self):
-        """test no args for update"""
-        r = Rectangle(1, 1, 0, 0, 1)
-        r.update()
-        self.assertEqual(str(r), "[Rectangle] (1) 0/0 - 1/1")
+    def test_badxvaluewithsets(self):
+        """This function tests for bad x value with sets"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, 2, {1, 2, 3}, 2, 3)
+        self.assertEqual(str(e.exception), 'x must be an integer')
 
-    def test_update_kwargs(self):
-        """Testing the update method with **kwargs"""
-        r = Rectangle(1, 1, 0, 0, 1)
-        self.assertEqual(str(r), "[Rectangle] (1) 0/0 - 1/1")
-        r.update(height=10)
-        self.assertEqual(str(r), "[Rectangle] (1) 0/0 - 1/10")
-        r.update(width=11, x=2)
-        self.assertEqual(str(r), "[Rectangle] (1) 2/0 - 11/10")
-        r.update(y=3, width=4, x=5, id=89)
-        self.assertEqual(str(r), "[Rectangle] (89) 5/3 - 4/10")
-        r.update(x=6, height=7, y=8, width=9)
-        self.assertEqual(str(r), "[Rectangle] (89) 6/8 - 9/7")
+    def test_badyvaluewithsets(self):
+        """This function tests for bad y value with sets"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, 2, 2, {1, 2, 3}, 3)
+        self.assertEqual(str(e.exception), 'y must be an integer')
 
-    def test_update_kwargs_setter(self):
-        """tests that the update method uses setter with **kwargs"""
-        r = Rectangle(1, 1, 1, 1, 1)
-        with self.assertRaises(TypeError):
-            r.update(width="hello")
-        with self.assertRaises(TypeError):
-            r.update(height="hello")
-        with self.assertRaises(TypeError):
-            r.update(x="hello")
-        with self.assertRaises(TypeError):
-            r.update(y="hello")
-        with self.assertRaises(ValueError):
-            r.update(width=-1)
-        with self.assertRaises(ValueError):
-            r.update(width=0)
-        with self.assertRaises(ValueError):
-            r.update(height=-1)
-        with self.assertRaises(ValueError):
-            r.update(height=0)
-        with self.assertRaises(ValueError):
-            r.update(x=-1)
-        with self.assertRaises(ValueError):
-            r.update(y=-1)
+    def test_badwidthvaluedicts(self):
+        """This function tests for bad size value with sets"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle({"foo": 1}, 1, 2, 3, 7)
+        self.assertEqual(str(e.exception), 'width must be an integer')
 
-    def test_mix_args_kwargs(self):
-        """tests output for mixed args and kwargs"""
-        r = Rectangle(1, 1, 0, 0, 1)
-        r.update(2, 2, 2, 2, 2, width=3, height=3, x=3, y=3, id=3)
-        self.assertEqual(str(r), "[Rectangle] (2) 2/2 - 2/2")
+    def test_badheightvaluedicts(self):
+        """This function tests for bad size value with sets"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, {"foo": 1}, 1, 2, 7)
+        self.assertEqual(str(e.exception), 'height must be an integer')
 
-    def test_extra_kwargs(self):
-        """tests for random kwargs"""
-        r = Rectangle(1, 1, 0, 0, 1)
-        r.update(hello=2)
-        self.assertEqual(str(r), "[Rectangle] (1) 0/0 - 1/1")
+    def test_badxvaluewithdicts(self):
+        """This function tests for bad x value with dicts"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, 2, {"foo": 1}, 2, 3)
+        self.assertEqual(str(e.exception), 'x must be an integer')
 
-    def test_to_dict(self):
-        """test regular to_dictionary"""
-        d1 = self.r1.to_dictionary()
-        self.assertEqual({"id": 1, "width": 10, "height": 10, "x": 0, "y": 0},
-                         d1)
-        d2 = self.r2.to_dictionary()
-        self.assertEqual({"id": 2, "width": 2, "height": 3, "x": 4, "y": 0},
-                         d2)
-        d3 = self.r3.to_dictionary()
-        self.assertEqual({"id": 9, "width": 5, "height": 6, "x": 7, "y": 8},
-                         d3)
-        d4 = self.r4.to_dictionary()
-        self.assertEqual({"id": 3, "width": 11, "height": 12, "x": 13,
-                          "y": 14}, d4)
-        self.assertTrue(type(d1) is dict)
-        self.assertTrue(type(d2) is dict)
-        self.assertTrue(type(d3) is dict)
-        self.assertTrue(type(d4) is dict)
-        r = Rectangle(1, 1, 1, 1, 1)
-        r.update(**d4)
-        self.assertEqual(str(r), str(self.r4))
-        self.assertNotEqual(r, self.r4)
+    def test_badyvaluewithdicts(self):
+        """This function tests for bad y value with dicts"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(2, 1, 2, {"foo": 1}, 3)
+        self.assertEqual(str(e.exception), 'y must be an integer')
 
-    def test_save_to_file(self):
-        """test regular use of save_to_file"""
-        r1 = Rectangle(1, 1, 1, 1, 1)
-        r2 = Rectangle(2, 2, 2, 2, 2)
-        l = [r1, r2]
-        Rectangle.save_to_file(l)
-        with open("Rectangle.json", "r") as f:
-            ls = [r1.to_dictionary(), r2.to_dictionary()]
-            self.assertEqual(json.dumps(ls), f.read())
+    def test_badwidthvaluefuncs(self):
+        """This function tests for bad size value with funcs"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(print(), 2, 1, 2, 3)
+        self.assertEqual(str(e.exception), 'width must be an integer')
 
-    def test_stf_empty(self):
-        """test save_to_file with empty list"""
-        l = []
-        Rectangle.save_to_file(l)
-        with open("Rectangle.json", "r") as f:
-            self.assertEqual("[]", f.read())
+    def test_badheightvaluefuncs(self):
+        """This function tests for bad size value with funcs"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, print(), 1, 2, 3)
+        self.assertEqual(str(e.exception), 'height must be an integer')
 
-    def test_stf_None(self):
-        """test save_to_file with None"""
-        Rectangle.save_to_file(None)
-        with open("Rectangle.json", "r") as f:
-            self.assertEqual("[]", f.read())
+    def test_badxvaluewithfuncs(self):
+        """This function tests for bad x value with funcs"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(2, 1, print(), 2, 3)
+        self.assertEqual(str(e.exception), 'x must be an integer')
 
-    def test_create(self):
-        """test normal use of create"""
-        r1 = {"id": 2, "width": 2, "height": 3, "x": 4, "y": 0}
-        r2 = {"id": 9, "width": 5, "height": 6, "x": 7, "y": 8}
-        r1c = Rectangle.create(**r1)
-        r2c = Rectangle.create(**r2)
-        self.assertEqual("[Rectangle] (2) 4/0 - 2/3", str(r1c))
-        self.assertEqual("[Rectangle] (9) 7/8 - 5/6", str(r2c))
-        self.assertIsNot(r1, r1c)
-        self.assertIsNot(r2, r2c)
-        self.assertNotEqual(r1, r1c)
-        self.assertNotEqual(r2, r2c)
+    def test_badyvaluewithfuncs(self):
+        """This function tests for bad y value with funcs"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(2, 1, 2, print(), 3)
+        self.assertEqual(str(e.exception), 'y must be an integer')
 
-    def test_load_from_file_no_file(self):
-        """Checks use of load_from_file with no file"""
-        try:
-            os.remove("Rectangle.json")
-        except:
-            pass
-        self.assertEqual(Rectangle.load_from_file(), [])
+    def test_allbadvalues(self):
+        """This function tests for bad width value"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(False, "foo", {"str": 7}, ("hello", ), True)
+        self.assertEqual(str(e.exception), 'width must be an integer')
 
-    def test_load_from_file_empty_file(self):
-        """Checks use of load_from_file with empty file"""
-        try:
-            os.remove("Rectangle.json")
-        except:
-            pass
-        open("Rectangle.json", 'a').close()
-        self.assertEqual(Rectangle.load_from_file(), [])
+    def test_NaNwidth(self):
+        """This function tests for NaN x value"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(float('nan'), 10, 5, 7, 7)
+        self.assertEqual(str(e.exception), 'width must be an integer')
 
-    def test_load_from_file(self):
-        """test normal use of load_from_file"""
-        r1 = Rectangle(1, 2, 3, 4, 5)
-        r2 = Rectangle(6, 7, 8, 9, 10)
-        li = [r1, r2]
-        Rectangle.save_to_file(li)
-        lo = Rectangle.load_from_file()
-        self.assertTrue(type(lo) is list)
-        self.assertEqual(len(lo), 2)
-        r1c = lo[0]
-        r2c = lo[1]
-        self.assertTrue(type(r1c) is Rectangle)
-        self.assertTrue(type(r2c) is Rectangle)
-        self.assertEqual(str(r1), str(r1c))
-        self.assertEqual(str(r2), str(r2c))
-        self.assertIsNot(r1, r1c)
-        self.assertIsNot(r2, r2c)
-        self.assertNotEqual(r1, r1c)
-        self.assertNotEqual(r2, r2c)
+    def test_NaNheight(self):
+        """This function tests for NaN height value"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(10, float('nan'), 5, 7, 7)
+        self.assertEqual(str(e.exception), 'height must be an integer')
+
+    def test_NaNx(self):
+        """This function tests for NaN x value"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(10, 10, float('nan'), 5, 7)
+        self.assertEqual(str(e.exception), 'x must be an integer')
+
+    def test_NaNy(self):
+        """This function tests for NaN y value"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(10, 10, 5, float('nan'), 7)
+        self.assertEqual(str(e.exception), 'y must be an integer')
+
+    def test_NaNall(self):
+        """This function tests for all NaN values"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(
+                float('nan'), float('nan'),  float('nan'), float('nan'),
+                float('nan'))
+        self.assertEqual(str(e.exception), 'width must be an integer')
+
+    def test_infwidth(self):
+        """This function tests for NaN height value"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(float('Inf'), 10, 5, 7, 7)
+        self.assertEqual(str(e.exception), 'width must be an integer')
+
+    def test_infheight(self):
+        """This function tests for inf height value"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(10, float('Inf'), 5, 7, 7)
+        self.assertEqual(str(e.exception), 'height must be an integer')
+
+    def test_infx(self):
+        """This function tests for inf x value"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(10, 10, float('Inf'), 5, 7)
+        self.assertEqual(str(e.exception), 'x must be an integer')
+
+    def test_infy(self):
+        """This function tests for inf y value"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(10, 10, 5, float('Inf'), 7)
+        self.assertEqual(str(e.exception), 'y must be an integer')
+
+    def test_infall(self):
+        """This function tests for all inf value"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(float('Inf'), float('Inf'),  float('Inf'),
+                           float('Inf'),  float('Inf'))
+        self.assertEqual(str(e.exception), 'width must be an integer')
+
+    def test_inf(self):
+        """This function tests for NaN"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(float('inf'), 10, 10, 5, 7)
+        self.assertEqual(str(e.exception), 'width must be an integer')
+
+    def test_noidgiven(self):
+        """This function tests that id is auto-set when none is given"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 2)
+        self.assertEqual(r1.id, 1)
+
+    def test_recNoneid(self):
+        """This function tests for None argument"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, None)
+        self.assertEqual(r1.id, 1)
+
+    def test_widthgetter(self):
+        """This function tests for getting width"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(25, 20, 30, 35, 100)
+        self.assertEqual(r1.width, 25)
+
+    def test_heightgetter(self):
+        """This function tests for getting height"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(25, 20, 30, 35, 100)
+        self.assertEqual(r1.height, 20)
+
+    def test_xgetter(self):
+        """This function tests for getting x"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(25, 20, 30, 35, 100)
+        self.assertEqual(r1.x, 30)
+
+    def test_ygetter(self):
+        """This function tests for getting y"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(25, 20, 30, 35, 100)
+        self.assertEqual(r1.y, 35)
+
+    def test_widthsetter(self):
+        """This function tests the width setter"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(25, 20, 30, 35, 100)
+        r1.width = 45
+        self.assertEqual(r1.width, 45)
+
+    def test_heightsetter(self):
+        """This function tests the height setter"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(25, 20, 30, 35, 100)
+        r1.height = 40
+        self.assertEqual(r1.height, 40)
+
+    def test_xsetter(self):
+        """This function tests the x setter"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(25, 20, 30, 35, 100)
+        r1.x = 50
+        self.assertEqual(r1.x, 50)
+
+    def test_ysetter(self):
+        """This function tests the y setter"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(25, 20, 30, 35, 100)
+        r1.y = 55
+        self.assertEqual(r1.y, 55)
+
+    def test_widthsettervalidation(self):
+        """This function tests width setter validation"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(25, 20, 30, 35, 100)
+            r1.width = "foo"
+        self.assertEqual(str(e.exception), 'width must be an integer')
+
+    def test_heightsettervalidation(self):
+        """This function tests height setter validation"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(25, 20, 30, 35, 100)
+            r1.height = "foo"
+        self.assertEqual(str(e.exception), 'height must be an integer')
+
+    def test_xsettervalidation(self):
+        """This function tests x setter validation"""
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(25, 20, 30, 35, 100)
+            r1.x = "foo"
+        self.assertEqual(str(e.exception), 'x must be an integer')
+
+    def test_ysettervalidation(self):
+        """This function tests y setter validation"""
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(25, 20, 30, 35, 100)
+            r1.y = "foo"
+        self.assertEqual(str(e.exception), 'y must be an integer')
+
+    def test_widthsettervalidationfor0(self):
+        """This function tests width setter validation for 0"""
+        Rectangle.reset_objects()
+        with self.assertRaises(ValueError) as e:
+            r1 = Rectangle(25, 20, 30, 35, 100)
+            r1.width = 0
+        self.assertEqual(str(e.exception), 'width must be > 0')
+
+    def test_heightsettervalidationfor0(self):
+        """This function tests height setter validation for 0"""
+        Rectangle.reset_objects()
+        with self.assertRaises(ValueError) as e:
+            r1 = Rectangle(25, 20, 30, 35, 100)
+            r1.height = 0
+        self.assertEqual(str(e.exception), 'height must be > 0')
+
+    def test_widthsettervalidationfornegative(self):
+        """This function tests width setter validation for 0"""
+        Rectangle.reset_objects()
+        with self.assertRaises(ValueError) as e:
+            r1 = Rectangle(25, 20, 30, 35, 100)
+            r1.width = -1
+        self.assertEqual(str(e.exception), 'width must be > 0')
+
+    def test_heightsettervalidationfornegative(self):
+        """This function tests height setter validation for 0"""
+        Rectangle.reset_objects()
+        with self.assertRaises(ValueError) as e:
+            r1 = Rectangle(25, 20, 30, 35, 100)
+            r1.height = -1
+        self.assertEqual(str(e.exception), 'height must be > 0')
+
+    def test_xsettervalidationfornegative(self):
+        """This function tests width setter validation for 0"""
+        Rectangle.reset_objects()
+        with self.assertRaises(ValueError) as e:
+            r1 = Rectangle(25, 20, 30, 35, 100)
+            r1.x = -1
+        self.assertEqual(str(e.exception), 'x must be >= 0')
+
+    def test_ysettervalidationfornegative(self):
+        """This function tests width setter validation for 0"""
+        Rectangle.reset_objects()
+        with self.assertRaises(ValueError) as e:
+            r1 = Rectangle(25, 20, 30, 35, 100)
+            r1.y = -1
+        self.assertEqual(str(e.exception), 'y must be >= 0')
+
+    def test_recprivateclassvariable(self):
+        """This function tests __nb_objects being private"""
+        Rectangle.reset_objects()
+        with self.assertRaises(AttributeError) as e:
+            print(Rectangle.__nb_objects)
+        self.assertEqual(
+            str(e.exception),
+            "type object \'Rectangle\' has no attribute \'_TestBaseClass__n" +
+            "b_objects\'")
+
+    def test_recprivatewidthvariable(self):
+        """This function tests width being private"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(25, 20, 30, 35, 100)
+        with self.assertRaises(AttributeError) as e:
+            print(r1.__width)
+        self.assertEqual(
+            str(e.exception),
+            "\'Rectangle\' object has no attribute \'_TestBaseClass__width\'")
+
+    def test_recprivateheightvariable(self):
+        """This function tests height being private"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(25, 20, 30, 35, 100)
+        with self.assertRaises(AttributeError) as e:
+            print(r1.__height)
+        self.assertEqual(
+            str(e.exception),
+            "\'Rectangle\' object has no attribute \'_TestBaseClass__height\'")
+
+    def test_recprivatexvariable(self):
+        """This function tests width being private"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(25, 20, 30, 35, 100)
+        with self.assertRaises(AttributeError) as e:
+            print(r1.__x)
+        self.assertEqual(
+            str(e.exception),
+            "\'Rectangle\' object has no attribute \'_TestBaseClass__x\'")
+
+    def test_recprivateyvariable(self):
+        """This function tests width being private"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(25, 20, 30, 35, 100)
+        with self.assertRaises(AttributeError) as e:
+            print(r1.__y)
+        self.assertEqual(
+            str(e.exception),
+            "\'Rectangle\' object has no attribute \'_TestBaseClass__y\'")
+
+    def test_publicareamethod(self):
+        """This function tests the public area method"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(5, 10, 7, 9, 100)
+        self.assertEqual(r1.area(), 50)
+
+    def test_area_methodwithargthrowerror(self):
+        s3 = Rectangle(3, 1, 3)
+        with self.assertRaises(TypeError) as e:
+            s3.area(9)
+        self.assertEqual(str(e.exception),
+                         "area() takes 1 positional argument but 2 were given")
+
+    def test_updateid(self):
+        """This function tests the public area method"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        self.assertEqual(r1.id, 10)
+        r1.update(89)
+        self.assertEqual(r1.id, 89)
+
+    def test_updatewidth(self):
+        """This function tests updating width"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        self.assertEqual(r1.width, 10)
+        r1.update(89, 2)
+        self.assertEqual(r1.width, 2)
+
+    def test_updateheight(self):
+        """This function tests updating height"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        self.assertEqual(r1.height, 10)
+        r1.update(89, 2, 3)
+        self.assertEqual(r1.height, 3)
+
+    def test_updatex(self):
+        """This function tests updating x"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        self.assertEqual(r1.x, 10)
+        r1.update(89, 2, 3, 4)
+        self.assertEqual(r1.x, 4)
+
+    def test_updatey(self):
+        """This function tests updating y"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        self.assertEqual(r1.y, 10)
+        r1.update(89, 2, 3, 4, 5)
+        self.assertEqual(r1.y, 5)
+
+    def test_updateall(self):
+        """This function tests updating all attributes"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10)
+        self.assertEqual(r1.x, 10)
+        r1.update(89, 2, 3, 4, 5)
+        self.assertEqual(r1.y, 5)
+
+    def test_updatewidthbadvalue(self):
+        """This function tests updating width with bad value"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        with self.assertRaises(TypeError) as e:
+            r1.update(89, "foo")
+        self.assertEqual(str(e.exception), "width must be an integer")
+
+    def test_updateheightbadvalue(self):
+        """This function tests updating width with bad value"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        with self.assertRaises(TypeError) as e:
+            r1.update(89, 15, "foo")
+        self.assertEqual(str(e.exception), "height must be an integer")
+
+    def test_updatexbadvalue(self):
+        """This function tests updating width with bad value"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        with self.assertRaises(TypeError) as e:
+            r1.update(89, 15, 20, "foo")
+        self.assertEqual(str(e.exception), "x must be an integer")
+
+    def test_updateybadvalue(self):
+        """This function tests updating width with bad value"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        with self.assertRaises(TypeError) as e:
+            r1.update(89, 15, 20, 25, "foo")
+        self.assertEqual(str(e.exception), "y must be an integer")
+
+    def test_updatekwargswidth(self):
+        """This function tests updating width with kwargs"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        r1.update(width=1)
+        self.assertEqual(r1.width, 1)
+
+    def test_updatekwargsheight(self):
+        """This function tests updating height with kwargs"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        r1.update(height=2)
+        self.assertEqual(r1.height, 2)
+
+    def test_updatekwargsx(self):
+        """This function tests updating x with kwargs"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        r1.update(x=3)
+        self.assertEqual(r1.x, 3)
+
+    def test_updatekwargsy(self):
+        """This function tests updating y with kwargs"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        r1.update(y=4)
+        self.assertEqual(r1.y, 4)
+
+    def test_updatekwargsid(self):
+        """This function tests updating id with kwargs"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        r1.update(id=5)
+        self.assertEqual(r1.id, 5)
+
+    def test_updatekwargsall(self):
+        """This function tests updating all attrs with kwargs"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        r1.update(width=5, height=5, x=5, y=5, id=5)
+        self.assertEqual(r1.width, 5)
+        self.assertEqual(r1.height, 5)
+        self.assertEqual(r1.x, 5)
+        self.assertEqual(r1.y, 5)
+        self.assertEqual(r1.id, 5)
+
+    def test_kwargsskipped(self):
+        """This function tests updating args with kwargs"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        r1.update(1, 2, 3, 4, 5, id=10)
+        self.assertEqual(r1.id, 1)
+
+    def test_badkeyignored(self):
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        r1.update(1, 2, 3, 4, 5, foo=20)
+        self.assertEqual(r1.id, 1)
+        self.assertEqual(r1.width, 2)
+        self.assertEqual(r1.height, 3)
+        self.assertEqual(r1.x, 4)
+        self.assertEqual(r1.y, 5)
+
+    def test_fornoargumentstoupdate(self):
+        """This function tests that update accepts 0 arguments"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 10, 10, 10, 10)
+        r1.update()
+        self.assertEqual(r1.id, 10)
+        self.assertEqual(r1.width, 10)
+        self.assertEqual(r1.height, 10)
+        self.assertEqual(r1.x, 10)
+        self.assertEqual(r1.y, 10)
+
+    def test_errorfortoomanyarguments(self):
+        """This function tests that Valueerror is thrown when extra args"""
+        Rectangle.reset_objects()
+        with self.assertRaises(TypeError) as e:
+            r1 = Rectangle(1, 2, 3, 4, 5, 6)
+        self.assertEqual(
+            str(e.exception),
+            "__init__() takes from 3 to 6 positional " +
+            "arguments but 7 were given")
+
+    def test_to_dictionary(self):
+        """This function tests the to_dictionary function"""
+        r1 = Rectangle(10, 2, 1, 9)
+        r1_dictionary = r1.to_dictionary()
+        self.assertEqual(r1_dictionary, {'x': 1, 'y': 9, 'id': 1, 'height': 2,
+                                         'width': 10})
+
+    def test_updatewithdict(self):
+        """This function tests the to_dictionary function"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 2, 3, 9)
+        r1_dictionary = r1.to_dictionary()
+        r2 = Rectangle(1, 1)
+        r2.update(**r1_dictionary)
+        self.assertEqual(r2.width, 10)
+        self.assertEqual(r2.height, 2)
+        self.assertEqual(r2.x, 3)
+        self.assertEqual(r2.y, 9)
+
+    def test_updatewithdictionarybycomparingdictionaries(self):
+        """This function tests the to_dictionary function"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(10, 2, 1, 9)
+        r1_dictionary = r1.to_dictionary()
+        r2 = Rectangle(1, 1)
+        r2.update(**r1_dictionary)
+        self.assertEqual(r1.__dict__, r2.__dict__)
+
+    def test__str__method(self):
+        """This function tests the str function"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(4, 6, 2, 1, 12)
+        self.assertEqual(str(r1), "[Rectangle] (12) 2/1 - 4/6")
+        r2 = Rectangle(5, 5, 1)
+        self.assertEqual(str(r2), "[Rectangle] (1) 1/0 - 5/5")
+
+    def test_display__method(self):
+        """This function tests the display function"""
+        Rectangle.reset_objects()
+        r1 = Rectangle(2, 3, 2, 2)
+        f = io.StringIO()
+        with contextlib.redirect_stdout(f):
+            r1.display()
+        self.assertEqual(f.getvalue(), "\n\n  ##\n  ##\n  ##\n")
+
+    def test_display__method2(self):
+        """This function tests the display function"""
+        Rectangle.reset_objects()
+        r2 = Rectangle(3, 2, 1, 0)
+        f = io.StringIO()
+        with contextlib.redirect_stdout(f):
+            r2.display()
+        self.assertEqual(f.getvalue(), " ###\n ###\n")
