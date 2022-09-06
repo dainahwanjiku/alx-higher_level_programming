@@ -1,11 +1,7 @@
 #!/usr/bin/node
 class Rectangle {
-constructor(h, w) {
-this.h = height;
-this.w = width;
+constructor(w, h) {
+this.width = w;
+this.height = h;
 }
-}
-
-const obj = new Rectangle();
-obj.height;
-obj.width;
+};
