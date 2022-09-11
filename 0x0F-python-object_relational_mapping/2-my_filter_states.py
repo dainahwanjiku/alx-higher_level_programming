@@ -22,6 +22,6 @@ if __name__ == "__main__":
 
     for state in nStates:
         print(state)
-    
+
     cursor.close()
     db.close()
