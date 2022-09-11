@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-python script that lists all states from the database 
+python script that lists all states from the database
 hbtn_0e_0_usa with a name starting with N
 """
 import sys
@@ -15,13 +15,13 @@ if __name__ == "__main__":
     cursor = db.cursor()
     cmd = """SELECT id, name
           FROM states
-          WHERE name LIKE BINARY 'N%' 
+          WHERE name LIKE BINARY 'N%'
           ORDER BY id ASC;"""
     cursor.execute(cmd)
     nStates = cursor.fetchall()
 
     for state in nStates:
         print(state)
-    
+
     cursor.close()
     db.close()
