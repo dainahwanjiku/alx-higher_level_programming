@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """
-python script that lists all states from the database hbtn_0e_0_usa with a name
-starting with N
+python script that lists all states from the database 
+hbtn_0e_0_usa with a name starting with N
 """
-from sys import argv
+import sys
 import MySQLdb
 
 if __name__ == "__main__":
@@ -13,7 +13,10 @@ if __name__ == "__main__":
                          passwd=sys.argv[2],
                          db=sys.argv[3])
     cursor = db.cursor()
-    cmd = """SELECT id, name FROM states WHERE name LIKE BINARY 'N%' ORDER BY id ASC;"""
+    cmd = """SELECT id, name
+          FROM states
+          WHERE name LIKE BINARY 'N%' 
+          ORDER BY id ASC;"""
     cursor.execute(cmd)
     nStates = cursor.fetchall()
 
