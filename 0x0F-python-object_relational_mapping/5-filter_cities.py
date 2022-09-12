@@ -20,7 +20,7 @@ if __name__ == "__main__":
          WHERE states.name=%s
          ORDER BY cities.id ASC"""
     cursor.execute(cmd, (sys.argv[4],))
-    allCities = cur.fetchall()
+    allCities = cursor.fetchall()
 
     print(", ".join([city[0] for city in allCities]))
 
