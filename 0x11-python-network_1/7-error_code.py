@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """
-Use requests package to make a get request to given URL and display
-the body of response, or error code if error.
+Use requests package to make a get request to given URL anddisplay `the body of response, or error code if error.
 """
 if __name__ == "__main__":
     import requests
