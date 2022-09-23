@@ -5,11 +5,11 @@ utf-8. Manage urllib's error exceptions.
 """
 if __name__ == "__main__":
     import urllib.error as Error
-    import urllib.request as Request
+    import urllib.request as request
     from sys import argv
-    req = urllib.request.Request(sys.argv[1])
+    req = request.Request(argv[1])
     try:
-        with urllib.request.urlopen(req) as r:
+        with request.urlopen(req) as r:
             print(r.read().decode('utf-8'))
-    except urllib.error.HTTPError as e:
+    except error.HTTPError as e:
         print("Error code: {}".format(e.code))
