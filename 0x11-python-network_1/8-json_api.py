@@ -5,10 +5,9 @@ set in variable `q`, defaulting to empty string. If response body is properly
 JSON formatted and not empty, display `id` and `name` as given format.
 Otherwise display error message.
 """
-import sys
-import requests
-
 if __name__ == "__main__":
+    import requests
+    from sys import argv
     if len(sys.argv) > 1:
         arg = sys.argv[1]
     else:

@@ -3,11 +3,9 @@
 Use requests package to make a post request sending email param
 and display body of response.
 """
-import sys
-import requests
-
 if __name__ == "__main__":
-    url = sys.argv[1]
+    import requests
+    from sys import argv
     payload = {'email': sys.argv[2]}
-    r = requests.post(url, data=payload)
+    r = requests.post(argv[1], data=payload)
     print(r.text)
